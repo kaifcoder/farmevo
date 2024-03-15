@@ -5,8 +5,9 @@ import jwt from "jsonwebtoken"
 import { Product } from "../models/product.model.js"
 import mongoose from "mongoose";
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
-// create product if role is farmer 
 
+
+// create product if role is farmer 
 const createProduct = asyncHandler(async (req, res) => {
     // get product details from frontend
     try {
@@ -60,11 +61,26 @@ const createProduct = asyncHandler(async (req, res) => {
 })
 
 // get all products for all roles
-
 const getAllProducts = asyncHandler(async (req, res) => {
     try {
         const products = await Product.find({ isPublished: true }).populate('createdBy', '-password -refreshToken').populate('category', 'name')
         res.status(200).json(new ApiResponse(200, "All products", products))
+    } catch (error) {
+        throw new ApiError(500, "Something went wrong while getting products")
+    }
+})
+
+// get all products farmer's specific products
+const getFarmerProducts = asyncHandler(async (req, res) => {
+    try {
+        if (
+            req.user.role !== 'farmer' && req.user.role !== 'admin'
+        ) {
+            throw new ApiError(403, "You are not authorized to get farmer specific products")
+        }
+
+        const products = await Product.find({ createdBy: req.user._id }).populate('createdBy', '-password -refreshToken').populate('category', 'name')
+        res.status(200).json(new ApiResponse(200, "All products created by farmer", products))
     } catch (error) {
         throw new ApiError(500, "Something went wrong while getting products")
     }
@@ -132,7 +148,6 @@ const updateProduct = asyncHandler(async (req, res) => {
 )
 
 // delete product if role is admin or farmer
-
 const deleteProduct = asyncHandler(async (req, res) => {
     try {
         if (req.user.role !== 'farmer' && req.user.role !== 'admin') {
@@ -167,5 +182,6 @@ export {
     getAllProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getFarmerProducts
 }

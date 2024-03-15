@@ -6,7 +6,6 @@ import { Order } from "../models/order.model.js"
 
 
 // create order if role is industry or admin
-
 const createOrder = asyncHandler(async (req, res) => {
     // get order details from frontend
     try {
