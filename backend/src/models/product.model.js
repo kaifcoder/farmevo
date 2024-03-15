@@ -31,10 +31,6 @@ const productSchema = new Schema(
         thumbnail: {
             type: String,
         },
-        images: {
-            type: [String],
-            required: true
-        },
         isPublished: {
             type: Boolean,
             default: true

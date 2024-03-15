@@ -34,7 +34,6 @@ const orderSchema = new Schema(
             type: String,
             enum: ['pending', 'cancelled', 'shipped', 'delivered'],
             default: 'pending'
-
         },
         customer: {
             type: Schema.Types.ObjectId,
