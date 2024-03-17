@@ -21,7 +21,7 @@ router.route('/:orderId').get(
 );
 
 
-router.route('/farmer').get(
+router.route('/get/farmer').get(
     verifyJWT,
     getFarmerOrders
 ).put(

@@ -1,5 +1,5 @@
 import { CardContent, Card } from "@/components/ui/card";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import useAuth from "@/hooks/useAuth";

@@ -9,9 +9,15 @@ import useAuth from "@/hooks/useAuth";
 export function OrderTable() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]) as any[];
+  const { user } = useAuth();
+
+  const role = user?.role;
+
   const fetchOrders = async () => {
     try {
-      const { data } = await axiosWithAuth.get("/orders");
+      const { data } = await axiosWithAuth.get(
+        "/orders" + (role === "farmer" ? `/get/farmer` : "")
+      );
       setOrders(data && data?.message);
     } catch (error: any) {
       console.log(error);

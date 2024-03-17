@@ -3,33 +3,46 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
 import { Order } from "../models/order.model.js"
+import { Product } from "../models/product.model.js"
 
 
 // create order if role is industry or admin
 const createOrder = asyncHandler(async (req, res) => {
 
-    if (req.user.role !== 'industry') {
-        throw new ApiError(403, "You are not authorized to create order")
+    try {
+        if (req.user.role !== 'industry') {
+            throw new ApiError(403, "You are not authorized to create order")
+        }
+        const { product, price, quantity, deliveryAddress } = req.body
+
+        const checkProductStock = await Product.findById(product).select('stock')
+
+        if (checkProductStock.stock < quantity) {
+            throw new ApiError(400, "Insufficient stock")
+        }
+
+        const order = await Order.create({
+            product,
+            quantity,
+            price,
+            deliveryAddress,
+            customer: req.user._id
+        })
+
+        const productStockUpdate = await Product.findByIdAndUpdate(product, {
+            $inc: { stock: -quantity }
+        }, { new: true })
+
+        // check for order creation
+        if (!order) {
+            throw new ApiError(500, "Order creation failed")
+        }
+
+        // send response
+        res.status(201).json(new ApiResponse(201, "Order created successfully", order))
+    } catch (error) {
+        return res.status(error.status || 500).json(new ApiResponse(400, null, error.message))
     }
-    const { product, price, quantity, deliveryAddress } = req.body
-
-
-
-    const order = await Order.create({
-        product,
-        quantity,
-        price,
-        deliveryAddress,
-        customer: req.user._id
-    })
-
-    // check for order creation
-    if (!order) {
-        throw new ApiError(500, "Order creation failed")
-    }
-
-    // send response
-    res.status(201).json(new ApiResponse(201, "Order created successfully", order))
 })
 
 const getIndustryOrders = asyncHandler(async (req, res) => {
@@ -73,7 +86,13 @@ const getFarmerOrders = asyncHandler(async (req, res) => {
             throw new ApiError(403, "You are not authorized to view orders")
         }
 
-        const orders = await Order.find({}).populate('createdBy', 'name email').populate('product');
+        const orders = await Order.find({}).populate('customer', 'fullName email phoneNumber ').populate({
+            path: 'product',
+            populate: {
+                path: 'createdBy',
+                select: 'fullName email'
+            }
+        });
 
         orders.filter((order) => order.product.createdBy._id === req.user._id)
 
@@ -86,7 +105,7 @@ const getFarmerOrders = asyncHandler(async (req, res) => {
         res.status(200).json(new ApiResponse(200, "Orders retrieved successfully", orders))
 
     } catch (error) {
-        throw new ApiError(500, "Something went wrong while retrieving orders")
+        return res.status(error.status || 500).json(new ApiResponse(400, null, error.message))
     }
 })
 

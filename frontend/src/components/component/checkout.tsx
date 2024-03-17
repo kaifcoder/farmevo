@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { axiosWithAuth } from "@/api/axios";
+import { toast } from "sonner";
 
 export function Checkout() {
   const navigate = useNavigate();
@@ -42,8 +43,10 @@ export function Checkout() {
       });
 
       console.log(data);
+      toast.success("Order placed successfully");
       navigate("/home/order");
     } catch (error: any) {
+      toast.error("Error placing order: " + error.response?.data?.message);
       console.log(error);
     }
   };
