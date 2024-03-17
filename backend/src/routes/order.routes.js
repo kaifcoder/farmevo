@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { createOrder, getFarmerOrders, getIndustryOrders, updateOrder } from "../controllers/order.controller.js";
+import { createOrder, getFarmerOrders, getIndustryOrders, getOrder, updateOrder } from "../controllers/order.controller.js";
 
 
 
@@ -13,6 +13,11 @@ router.route('/').get(
 ).post(
     verifyJWT,
     createOrder
+);
+
+router.route('/:orderId').get(
+    verifyJWT,
+    getOrder
 );
 
 

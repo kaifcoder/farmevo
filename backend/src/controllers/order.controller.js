@@ -7,40 +7,29 @@ import { Order } from "../models/order.model.js"
 
 // create order if role is industry or admin
 const createOrder = asyncHandler(async (req, res) => {
-    // get order details from frontend
-    try {
-        if (req.user.role !== 'industry') {
-            throw new ApiError(403, "You are not authorized to create order")
-        }
-        const { product, quantity, price, deliveryAddress, deliveryDate } = req.body
 
-        // validation - not empty
-        if (
-            [product, quantity, price, deliveryAddress, deliveryDate].some((field) => field?.trim() === "")
-        ) {
-            throw new ApiError(400, "All fields are required")
-        }
-
-        const order = await Order.create({
-            product,
-            quantity,
-            price,
-            deliveryAddress,
-            deliveryDate,
-            createdBy: req.user._id
-        })
-
-        // check for order creation
-        if (!order) {
-            throw new ApiError(500, "Order creation failed")
-        }
-
-        // send response
-        res.status(201).json(new ApiResponse(201, "Order created successfully", order))
-
-    } catch (error) {
-        throw new ApiError(500, "Something went wrong while creating order")
+    if (req.user.role !== 'industry') {
+        throw new ApiError(403, "You are not authorized to create order")
     }
+    const { product, price, quantity, deliveryAddress } = req.body
+
+
+
+    const order = await Order.create({
+        product,
+        quantity,
+        price,
+        deliveryAddress,
+        customer: req.user._id
+    })
+
+    // check for order creation
+    if (!order) {
+        throw new ApiError(500, "Order creation failed")
+    }
+
+    // send response
+    res.status(201).json(new ApiResponse(201, "Order created successfully", order))
 })
 
 const getIndustryOrders = asyncHandler(async (req, res) => {
@@ -51,8 +40,16 @@ const getIndustryOrders = asyncHandler(async (req, res) => {
         }
 
         const orders = await Order.find({
-            createdBy: req.user._id
-        }).populate('createdBy', 'name email').populate('product');
+            customer: req.user._id
+        }).populate('customer', 'fullName email phoneNumber ').populate({
+            path: 'product',
+            populate: {
+                path: 'createdBy',
+                select: 'fullName email'
+            }
+
+        });
+
 
         // check for orders
         if (!orders) {
@@ -63,6 +60,7 @@ const getIndustryOrders = asyncHandler(async (req, res) => {
         res.status(200).json(new ApiResponse(200, "Orders retrieved successfully", orders))
 
     } catch (error) {
+        console.log(error)
         throw new ApiError(500, "Something went wrong while retrieving orders")
     }
 })
@@ -125,10 +123,38 @@ const updateOrder = asyncHandler(async (req, res) => {
     }
 })
 
+const getOrder = asyncHandler(async (req, res) => {
+    // get order by id
+    try {
+
+        const { orderId } = req.params
+
+        const order = await Order.findById(orderId).populate('customer', 'fullName email phoneNumber ').populate({
+            path: 'product',
+            populate: {
+                path: 'createdBy',
+                select: 'fullName email'
+            }
+        });
+
+        // check for orders
+        if (!order) {
+            throw new ApiError(404, "No order found")
+        }
+
+        // send response
+        res.status(200).json(new ApiResponse(200, "Order retrieved successfully", order))
+
+    } catch (error) {
+        throw new ApiError(500, error.message || "Something went wrong while retrieving order")
+    }
+})
+
 
 export {
     createOrder,
     getFarmerOrders,
     updateOrder,
-    getIndustryOrders
+    getIndustryOrders,
+    getOrder
 }

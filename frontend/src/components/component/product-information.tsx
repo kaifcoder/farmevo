@@ -9,13 +9,14 @@ import useAuth from "@/hooks/useAuth";
 const ProductInformation = () => {
   const navigate = useNavigate();
   const handleOrderNow = () => {
-    navigate("/home/checkout");
+    navigate("/home/checkout", { state: { product: productInfo, qty: qty } });
   };
 
   const { productId } = useParams();
 
   const [productInfo, setProductInfo] = useState({}) as any;
   const [loading, setLoading] = useState(true);
+  const [qty, setQty] = useState(1);
   const { user } = useAuth();
   const role = user?.role;
 
@@ -84,7 +85,7 @@ const ProductInformation = () => {
                 className="w-1/2 p-2 text-sm border border-gray-300 rounded-lg"
                 id="quantity"
                 type="number"
-                value="1"
+                onChange={(e) => setQty(Number(e.target.value))}
               />
             </div>
             <div className="flex flex-col gap-2">

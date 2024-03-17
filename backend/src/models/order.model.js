@@ -17,16 +17,19 @@ const orderItemSchema = new Schema(
 
 const orderSchema = new Schema(
     {
-        orderPrice: {
+        price: {
             type: Number,
             required: true,
             default: 0
 
         },
-        orderItems: {
-            type: [orderItemSchema]
+        product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true
         },
-        address: {
+
+        deliveryAddress: {
             type: String,
             required: true
         },
@@ -40,10 +43,17 @@ const orderSchema = new Schema(
             ref: 'User',
             required: true
         },
+        quantity: {
+            type: Number,
+            required: true,
+            default: 0
+        },
     },
     {
         timestamps: true
     }
 );
+
+
 
 export const Order = mongoose.model('Order', orderSchema)
