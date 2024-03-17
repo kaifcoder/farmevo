@@ -19,6 +19,7 @@ export function OrderTable() {
         "/orders" + (role === "farmer" ? `/get/farmer` : "")
       );
       setOrders(data && data?.message);
+      console.log(data.message);
     } catch (error: any) {
       console.log(error);
     }

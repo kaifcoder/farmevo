@@ -86,7 +86,7 @@ const getFarmerOrders = asyncHandler(async (req, res) => {
             throw new ApiError(403, "You are not authorized to view orders")
         }
 
-        const orders = await Order.find({}).populate('customer', 'fullName email phoneNumber ').populate({
+        let orders = await Order.find({}).populate('customer', 'fullName email phoneNumber ').populate({
             path: 'product',
             populate: {
                 path: 'createdBy',
@@ -94,7 +94,9 @@ const getFarmerOrders = asyncHandler(async (req, res) => {
             }
         });
 
-        orders.filter((order) => order.product.createdBy._id === req.user._id)
+        orders = orders.filter(order => order.product.createdBy._id.toString() === req.user._id.toString())
+
+        console.log(orders)
 
         // check for orders
         if (!orders) {
