@@ -8,6 +8,11 @@ const categorySchema = new Schema(
             unique: true,
             trim: true,
         },
+        createdBy: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        }
     },
     {
         timestamps: true

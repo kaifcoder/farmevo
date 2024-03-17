@@ -14,6 +14,8 @@ const createProduct = asyncHandler(async (req, res) => {
         if (req.user.role !== 'farmer' && req.user.role !== 'admin') {
             throw new ApiError(403, "You are not authorized to create product")
         }
+
+        console.log(req.body)
         const { name, description, price, stock, category } = req.body
 
         // validation - not empty
@@ -22,6 +24,8 @@ const createProduct = asyncHandler(async (req, res) => {
         ) {
             throw new ApiError(400, "All fields are required")
         }
+
+
 
         // local path for thumbnail
         const thumbnailLocalPath = req.file?.path;
@@ -56,6 +60,7 @@ const createProduct = asyncHandler(async (req, res) => {
         res.status(201).json(new ApiResponse(201, "Product created successfully", result))
 
     } catch (error) {
+
         throw new ApiError(500, "Something went wrong while creating product")
     }
 })

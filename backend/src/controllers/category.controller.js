@@ -24,7 +24,8 @@ const createCategory = asyncHandler(async (req, res) => {
         }
 
         const category = await Category.create({
-            name
+            name,
+            createdBy: req.user._id
         })
 
         // check for category creation
@@ -45,6 +46,17 @@ const createCategory = asyncHandler(async (req, res) => {
 
 // get all categories for all roles
 const getAllCategories = asyncHandler(async (req, res) => {
+    try {
+        const categories = await Category.find({
+            createdBy: req.user._id
+        });
+        res.status(200).json(new ApiResponse(200, "All categories", categories))
+    } catch (error) {
+        throw new ApiError(500, "Something went wrong while getting categories")
+    }
+})
+
+const allCat = asyncHandler(async (req, res) => {
     try {
         const categories = await Category.find({});
         res.status(200).json(new ApiResponse(200, "All categories", categories))
@@ -129,5 +141,6 @@ export {
     createCategory,
     getAllCategories,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    allCat
 }

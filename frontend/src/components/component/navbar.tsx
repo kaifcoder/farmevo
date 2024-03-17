@@ -1,9 +1,12 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { Input } from "../ui/input";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, Link } from "react-router-dom";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import AuthContext from "@/provider/authProvider";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -11,12 +14,15 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const location = useLocation();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const { user, setUser } = useContext(AuthContext);
 
   useEffect(() => {
     setCurrentPath(location.pathname);
-  }, [location]);
+  }, [location.pathname]);
 
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [currentPath, setCurrentPath] = useState(location.pathname);
   const navigation = [
     {
       name: "Products",
@@ -29,6 +35,14 @@ export default function Navbar() {
       current: currentPath === "/home/order",
     },
   ];
+
+  const handleLogout = async () => {
+    try {
+      console.log("logout");
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const farmernavigation = [
@@ -53,6 +67,15 @@ export default function Navbar() {
       current: currentPath === "/home/categories-crud",
     },
   ];
+
+  const [navItems, setNavItems] = useState(navigation);
+
+  useEffect(() => {
+    if (user.role === "farmer") {
+      setNavItems(farmernavigation);
+    }
+  }, [user.role]);
+
   return (
     <>
       <Disclosure as="nav" className="bg-gray-800">
@@ -82,10 +105,10 @@ export default function Navbar() {
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
-                      {farmernavigation.map((item) => (
-                        <a
+                      {navItems.map((item) => (
+                        <Link
                           key={item.name}
-                          href={item.href}
+                          to={item.href}
                           className={classNames(
                             item.current
                               ? "bg-gray-900 text-white"
@@ -95,7 +118,7 @@ export default function Navbar() {
                           aria-current={item.current ? "page" : undefined}
                         >
                           {item.name}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -132,29 +155,29 @@ export default function Navbar() {
                       <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="profile"
+                            <Link
+                              to="profile"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Your Profile
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
 
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="/"
+                            <Link
+                              to="/"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Sign out
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       </Menu.Items>
@@ -166,21 +189,21 @@ export default function Navbar() {
 
             <Disclosure.Panel className="sm:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
-                {navigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "block rounded-md px-3 py-2 text-base font-medium"
-                    )}
-                    aria-current={item.current ? "page" : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
+                {navItems.map((item) => (
+                  <Link to={item.href}>
+                    <Disclosure.Button
+                      key={item.name}
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "block rounded-md px-3 py-2 text-base font-medium"
+                      )}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  </Link>
                 ))}
               </div>
             </Disclosure.Panel>

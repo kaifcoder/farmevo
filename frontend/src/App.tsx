@@ -11,12 +11,16 @@ import { Checkout } from "./components/component/checkout";
 import { Profile } from "./components/component/profile";
 import { CategoriesCrud } from "./components/component/categories-crud";
 
+import RequireAuth from "./components/component/RequireAuth";
+
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <Routes>
+      {/* public routes */}
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      {/* protected routes */}
+      <Route element={<RequireAuth />}>
         <Route path="/home" element={<Navbar />}>
           <Route path="add-product" element={<AddProduct />} />
           <Route path="categories-crud" element={<CategoriesCrud />} />
@@ -27,8 +31,9 @@ function App() {
           <Route path="order/:orderId" element={<OrderDetails />} />
           <Route path="profile" element={<Profile />} />
         </Route>
-      </Routes>
-    </BrowserRouter>
+      </Route>
+      {/*  */}
+    </Routes>
   );
 }
 
