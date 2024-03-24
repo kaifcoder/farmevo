@@ -40,8 +40,10 @@ const ProductInformation = () => {
   }, []);
 
   const position = [
-    !loading && productInfo && productInfo?.createdBy?.location?.lat,
-    !loading && productInfo && productInfo?.createdBy?.location?.lng,
+    (!loading && productInfo && productInfo?.createdBy?.location?.lat) ||
+      28.7041,
+    (!loading && productInfo && productInfo?.createdBy?.location?.lng) ||
+      77.1025,
   ];
 
   return (
@@ -121,7 +123,7 @@ const ProductInformation = () => {
           </h2>
           {!loading && (
             <div>
-              <MapContainer center={position} zoom={16} scrollWheelZoom={false}>
+              <MapContainer center={position} zoom={12} scrollWheelZoom={false}>
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=QjaGnb9MZcnSOUKsLTBu"

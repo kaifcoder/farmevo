@@ -42,7 +42,7 @@ const productSchema = new Schema(
         },
         type: {
             type: String,
-            enum: ['product', 'by-product'],
+            enum: ['product', 'byproduct'],
             default: 'product',
             required: true
         }

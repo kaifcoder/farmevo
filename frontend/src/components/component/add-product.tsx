@@ -93,118 +93,125 @@ export function AddProduct() {
   };
 
   return (
-    <Card className="w-full max-w-xl m-8 mx-auto">
-      <CardHeader>
-        <CardTitle className="text-lg">Add Product</CardTitle>
-        <CardDescription>Fill out the information below.</CardDescription>
-      </CardHeader>
-      <form onSubmit={handleAddProduct}>
-        <CardContent className="flex">
-          <div className="grid w-full gap-6">
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-sm" htmlFor="image">
-                Image
-              </Label>
-              <>
+    <>
+      {loading && (
+        <div className="flex items-center justify-center h-96">
+          <div className="w-32 h-32 border-b-2 border-gray-900 rounded-full animate-spin"></div>
+        </div>
+      )}
+      <Card className="w-full max-w-xl m-8 mx-auto">
+        <CardHeader>
+          <CardTitle className="text-lg">Add Product</CardTitle>
+          <CardDescription>Fill out the information below.</CardDescription>
+        </CardHeader>
+        <form onSubmit={handleAddProduct}>
+          <CardContent className="flex">
+            <div className="grid w-full gap-6">
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm" htmlFor="image">
+                  Image
+                </Label>
+                <>
+                  <Input
+                    type="file"
+                    className=""
+                    accept="image/*"
+                    id="image"
+                    onChange={(e: any) => setThumbnail(e.target.files[0])}
+                  />
+                </>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm" htmlFor="name">
+                  Name
+                </Label>
                 <Input
-                  type="file"
-                  className=""
-                  accept="image/*"
-                  id="image"
-                  onChange={(e: any) => setThumbnail(e.target.files[0])}
+                  id="name"
+                  placeholder="Enter the product name."
+                  onChange={(e) => setName(e.target.value)}
                 />
-              </>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm" htmlFor="description">
+                  Description
+                </Label>
+                <Textarea
+                  id="description"
+                  placeholder="Enter the product description."
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm" htmlFor="price">
+                  Price
+                </Label>
+                <Input
+                  id="price"
+                  placeholder="Enter the product price."
+                  type="number"
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm" htmlFor="quantity">
+                  Stock Quantity
+                </Label>
+                <Input
+                  id="quantity"
+                  placeholder="Enter the stock quantity."
+                  type="number"
+                  onChange={(e) => setStock(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm" htmlFor="category">
+                  Type
+                </Label>
+                <select
+                  id="type"
+                  onChange={(e) => setType(e.target.value)}
+                  name="type"
+                  title="select a type"
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                >
+                  <option value="product">Product</option>
+                  <option value="byproduct">By Product</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm" htmlFor="category">
+                  Category
+                </Label>
+                <select
+                  id="category"
+                  onChange={(e) => setCategory(e.target.value)}
+                  name="category"
+                  title="select a categoy"
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                >
+                  {categories.map((category: any) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-sm" htmlFor="name">
-                Name
-              </Label>
-              <Input
-                id="name"
-                placeholder="Enter the product name."
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-sm" htmlFor="description">
-                Description
-              </Label>
-              <Textarea
-                id="description"
-                placeholder="Enter the product description."
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-sm" htmlFor="price">
-                Price
-              </Label>
-              <Input
-                id="price"
-                placeholder="Enter the product price."
-                type="number"
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-sm" htmlFor="quantity">
-                Stock Quantity
-              </Label>
-              <Input
-                id="quantity"
-                placeholder="Enter the stock quantity."
-                type="number"
-                onChange={(e) => setStock(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-sm" htmlFor="category">
-                Type
-              </Label>
-              <select
-                id="type"
-                onChange={(e) => setType(e.target.value)}
-                name="type"
-                title="select a type"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-              >
-                <option value="product">Product</option>
-                <option value="byproduct">By Product</option>
-              </select>
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-sm" htmlFor="category">
-                Category
-              </Label>
-              <select
-                id="category"
-                onChange={(e) => setCategory(e.target.value)}
-                name="category"
-                title="select a categoy"
-                className="w-full p-2 border border-gray-300 rounded-lg"
-              >
-                {categories.map((category: any) => (
-                  <option key={category._id} value={category._id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter className="flex gap-2">
-          <Button
-            onClick={() => navigate("/home/product")}
-            className="flex-1"
-            variant="outline"
-          >
-            Cancel
-          </Button>
-          <Button className="flex-1" type="submit">
-            Save
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+          </CardContent>
+          <CardFooter className="flex gap-2">
+            <Button
+              onClick={() => navigate("/home/product")}
+              className="flex-1"
+              variant="outline"
+            >
+              Cancel
+            </Button>
+            <Button disabled={loading} className="flex-1" type="submit">
+              Save
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
+    </>
   );
 }

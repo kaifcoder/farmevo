@@ -114,7 +114,7 @@ export default function Navbar() {
                     />
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
-                    <div className="flex space-x-2">
+                    <div className="flex items-center space-x-2">
                       {navItems.map((item) => (
                         <Link
                           key={item.name}
@@ -130,20 +130,20 @@ export default function Navbar() {
                           {item.name}
                         </Link>
                       ))}
+                      <Input
+                        type="text"
+                        className="w-[250px] p-2  text-gray-700 rounded-md "
+                        placeholder="Search"
+                      />
                     </div>
                   </div>
                   {/* search bar */}
-                  <Input
-                    type="text"
-                    className="w-[250px] p-2  text-gray-700 rounded-md "
-                    placeholder="Search"
-                  />
-                  <p className="flex-1 font-semibold text-end">
-                    <span className="text-white">
-                      Welcome {user?.user?.fullName}
-                    </span>
-                  </p>
                 </div>
+                <p className="flex-1 font-semibold text-end">
+                  <span className="text-white">
+                    Welcome {user?.user?.fullName}
+                  </span>
+                </p>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">

@@ -16,8 +16,9 @@ const ByProducts = () => {
   const fetchProducts = async () => {
     try {
       const { data } = await axiosWithAuth.get(product_endpoint);
-
+      console.log(data);
       setProducts(data && data?.message);
+
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
@@ -31,9 +32,20 @@ const ByProducts = () => {
   return (
     <div>
       <div className="grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {products.map((product, idx) => (
-          <ProductCard key={idx} product={product} setProduct={setProducts} />
-        ))}
+        {
+          // filter products on basis type
+          products.map((product, idx) => {
+            if (product.type === "byproduct") {
+              return (
+                <ProductCard
+                  key={idx}
+                  product={product}
+                  setProduct={setProducts}
+                />
+              );
+            }
+          })
+        }
       </div>
     </div>
   );

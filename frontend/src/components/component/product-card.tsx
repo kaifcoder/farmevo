@@ -54,13 +54,13 @@ export function ProductCard({
           }
           width="400"
           onClick={() => {
-            navigate(product._id);
+            navigate("/home/product/" + product._id);
           }}
         />
 
         <CardContent
           onClick={() => {
-            navigate(product._id);
+            navigate("/home/product/" + product._id);
           }}
           className="p-4"
         >
