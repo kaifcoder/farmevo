@@ -30,6 +30,11 @@ export default function Navbar() {
       current: currentPath === "/home/product",
     },
     {
+      name: "By Products",
+      href: "/home/byproduct",
+      current: currentPath === "/home/byproduct",
+    },
+    {
       name: "Orders",
       href: "/home/order",
       current: currentPath === "/home/order",
@@ -50,6 +55,11 @@ export default function Navbar() {
       name: "Products",
       href: "/home/product",
       current: currentPath === "/home/product",
+    },
+    {
+      name: "By Products",
+      href: "/home/byproduct",
+      current: currentPath === "/home/byproduct",
     },
     {
       name: "Orders",
@@ -96,7 +106,7 @@ export default function Navbar() {
                   </Disclosure.Button>
                 </div>
                 <div className="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
-                  <div className="flex items-center flex-shrink-0 bg-white rounded-full">
+                  <div className="flex items-center flex-shrink-0 rounded-full">
                     <img
                       className="w-auto h-10 rounded-lg"
                       src="/Farmevo.png"
@@ -104,7 +114,7 @@ export default function Navbar() {
                     />
                   </div>
                   <div className="hidden sm:ml-6 sm:block">
-                    <div className="flex space-x-4">
+                    <div className="flex space-x-2">
                       {navItems.map((item) => (
                         <Link
                           key={item.name}
@@ -122,14 +132,19 @@ export default function Navbar() {
                       ))}
                     </div>
                   </div>
-                </div>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   {/* search bar */}
                   <Input
                     type="text"
-                    className="w-auto p-2 text-gray-700 rounded-md "
+                    className="w-[250px] p-2  text-gray-700 rounded-md "
                     placeholder="Search"
                   />
+                  <p className="flex-1 font-semibold text-end">
+                    <span className="text-white">
+                      Welcome {user?.user?.fullName}
+                    </span>
+                  </p>
+                </div>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
@@ -190,7 +205,7 @@ export default function Navbar() {
             <Disclosure.Panel className="sm:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navItems.map((item) => (
-                  <Link to={item.href}>
+                  <Link key={item.name} to={item.href}>
                     <Disclosure.Button
                       key={item.name}
                       className={classNames(

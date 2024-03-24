@@ -33,8 +33,11 @@ export function AddProduct() {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState("");
-  const [category, setCategory] = useState("");
   const [categories, setCategories] = useState([]) as any;
+  const [category, setCategory] = useState(
+    categories.length > 0 ? categories[0]._id : ""
+  );
+  const [type, setType] = useState("product");
   const [loading, setLoading] = useState(false);
 
   const fetchCategories = async () => {
@@ -56,7 +59,15 @@ export function AddProduct() {
   const handleAddProduct = async (e: any) => {
     e.preventDefault();
     try {
-      console.log({ name, thumbnail, price, description, stock, category });
+      console.log({
+        name,
+        thumbnail,
+        price,
+        description,
+        stock,
+        category,
+        type,
+      });
       const formData = new FormData();
       formData.append("thumbnail", thumbnail);
       formData.append("name", name);
@@ -64,6 +75,7 @@ export function AddProduct() {
       formData.append("description", description);
       formData.append("stock", stock);
       formData.append("category", category);
+      formData.append("type", type);
 
       setLoading(true);
       const { data } = await axiosWithAuth.post("/products", formData, {
@@ -144,6 +156,21 @@ export function AddProduct() {
                 type="number"
                 onChange={(e) => setStock(e.target.value)}
               />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label className="text-sm" htmlFor="category">
+                Type
+              </Label>
+              <select
+                id="type"
+                onChange={(e) => setType(e.target.value)}
+                name="type"
+                title="select a type"
+                className="w-full p-2 border border-gray-300 rounded-lg"
+              >
+                <option value="product">Product</option>
+                <option value="byproduct">By Product</option>
+              </select>
             </div>
             <div className="flex flex-col gap-1.5">
               <Label className="text-sm" htmlFor="category">

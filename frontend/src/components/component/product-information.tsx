@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 // @ts-expect-error
 import useAuth from "@/hooks/useAuth";
 
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+
 const ProductInformation = () => {
   const navigate = useNavigate();
   const handleOrderNow = () => {
@@ -24,6 +27,7 @@ const ProductInformation = () => {
     try {
       const { data } = await axiosWithAuth.get("/products/" + productId);
       setProductInfo(data && data?.message);
+      console.log(data);
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
@@ -34,6 +38,11 @@ const ProductInformation = () => {
     console.log("fetching product info", productId);
     fetchProductInfo(productId);
   }, []);
+
+  const position = [
+    !loading && productInfo && productInfo?.createdBy?.location?.lat,
+    !loading && productInfo && productInfo?.createdBy?.location?.lng,
+  ];
 
   return (
     <div className="grid items-start grid-cols-1 gap-4 p-8 md:grid-cols-2">
@@ -105,6 +114,26 @@ const ProductInformation = () => {
             {productInfo?.description ||
               "This is a product description. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."}
           </p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Location of Farm
+          </h2>
+          {!loading && (
+            <div>
+              <MapContainer center={position} zoom={16} scrollWheelZoom={false}>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=QjaGnb9MZcnSOUKsLTBu"
+                />
+                {position && (
+                  <Marker position={position}>
+                    <Popup>{productInfo?.createdBy?.fullName}</Popup>
+                  </Marker>
+                )}
+              </MapContainer>
+            </div>
+          )}
         </div>
       </div>
     </div>

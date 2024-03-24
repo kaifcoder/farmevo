@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import useAuth from "@/hooks/useAuth";
-
-export default function Products() {
+const ByProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,4 +37,6 @@ export default function Products() {
       </div>
     </div>
   );
-}
+};
+
+export default ByProducts;

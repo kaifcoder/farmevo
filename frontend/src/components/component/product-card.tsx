@@ -73,7 +73,7 @@ export function ProductCard({
           <p className="text-sm text-gray-500 dark:text-gray-400">
             {product.description}
           </p>
-          <p>
+          <>
             {product.stock > 0 ? (
               <p className="text-sm text-green-500">
                 In stock {product.quantity}
@@ -81,7 +81,7 @@ export function ProductCard({
             ) : (
               <p className="text-sm text-red-500">Out of stock</p>
             )}
-          </p>
+          </>
           <div className="flex items-center justify-end space-x-4">
             <p className="text-sm font-semibold">Owner</p>
             <h2 className="font-bold text-md">{product.createdBy.fullName}</h2>

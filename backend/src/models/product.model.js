@@ -39,6 +39,12 @@ const productSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Category',
             required: true
+        },
+        type: {
+            type: String,
+            enum: ['product', 'by-product'],
+            default: 'product',
+            required: true
         }
     },
     {

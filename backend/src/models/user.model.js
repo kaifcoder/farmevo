@@ -33,6 +33,9 @@ const userSchema = new Schema(
             enum: ['farmer', 'industry', 'admin'],
             default: 'industry',
             required: true
+        },
+        location: {
+            type: {},
         }
 
     },

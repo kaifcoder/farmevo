@@ -25,7 +25,7 @@ const generateAccessAndRefereshTokens = async (userId) => {
 const registerUser = asyncHandler(async (req, res) => {
     // get user details from frontend
     try {
-        const { fullName, email, password, phoneNumber, role } = req.body
+        const { fullName, email, password, phoneNumber, role, location } = req.body
 
         // validation - not empty
         if (
@@ -48,7 +48,8 @@ const registerUser = asyncHandler(async (req, res) => {
             email,
             password,
             phoneNumber,
-            role
+            role,
+            location
         })
 
         // remove password and refresh token field from response
@@ -83,8 +84,9 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 })
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
+    console.log(incomingRefreshToken)
     if (!incomingRefreshToken) {
         throw new ApiError(401, "unauthorized request")
     }

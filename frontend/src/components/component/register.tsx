@@ -10,15 +10,21 @@ import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import { toast } from "sonner";
 import axios from "@/api/axios";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import useGeolocation from "@/hooks/useGeolocation";
 
 export function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("farmer");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const geolocation = useGeolocation();
+
+  console.log(geolocation);
 
   const handleSelectChange = (value: any) => {
     setRole(value);
@@ -28,26 +34,32 @@ export function Register() {
     e.preventDefault();
     try {
       setLoading(true);
-      console.log({ name, email, password, phone, role });
-      const { data } = await axios.post(
-        "/users/register",
-        {
-          fullName: name,
-          email: email,
-          password: password,
-          phoneNumber: phone,
-          role: role,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(data);
+      if (geolocation && geolocation.loaded && !geolocation.error) {
+        console.log({ name, email, password, phone, role });
+        const { data } = await axios.post(
+          "/users/register",
+          {
+            fullName: name,
+            email: email,
+            password: password,
+            phoneNumber: phone,
+            role: role,
+            location: geolocation.coordinates,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(data);
 
-      navigate("/");
-      toast.success(data.message);
+        navigate("/");
+        toast.success(data.message);
 
-      setLoading(false);
+        setLoading(false);
+      } else {
+        toast.error("Location not available");
+        setLoading(false);
+      }
     } catch (err: any) {
       toast.error(err.response?.data?.message || "An error occurred");
       setLoading(false);
@@ -134,6 +146,7 @@ export function Register() {
                   className="p-1  w-[250px] text-gray-900 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent"
                   name="role"
                   title="role"
+                  defaultValue={"farmer"}
                   required
                 >
                   <option value="farmer">Farmer</option>

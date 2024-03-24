@@ -16,7 +16,7 @@ const createProduct = asyncHandler(async (req, res) => {
         }
 
         console.log(req.body)
-        const { name, description, price, stock, category } = req.body
+        const { name, description, price, stock, category, type } = req.body
 
         // validation - not empty
         if (
@@ -44,7 +44,8 @@ const createProduct = asyncHandler(async (req, res) => {
             stock,
             thumbnail: thumbnail.secure_url || "",
             category,
-            createdBy: req.user._id
+            createdBy: req.user._id,
+            type
         })
 
 

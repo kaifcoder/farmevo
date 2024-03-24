@@ -12,6 +12,8 @@ import { Profile } from "./components/component/profile";
 import { CategoriesCrud } from "./components/component/categories-crud";
 
 import RequireAuth from "./components/component/RequireAuth";
+import Persistlogin from "./components/component/Persistlogin";
+import ByProducts from "./components/component/ByProducts";
 
 function App() {
   return (
@@ -20,16 +22,19 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       {/* protected routes */}
-      <Route element={<RequireAuth />}>
-        <Route path="/home" element={<Navbar />}>
-          <Route path="add-product" element={<AddProduct />} />
-          <Route path="categories-crud" element={<CategoriesCrud />} />
-          <Route path="product/:productId" element={<ProductInformation />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="product" element={<Products />} />
-          <Route path="order" element={<OrderTable />} />
-          <Route path="order/:orderId" element={<OrderDetails />} />
-          <Route path="profile" element={<Profile />} />
+      <Route element={<Persistlogin />}>
+        <Route element={<RequireAuth />}>
+          <Route path="/home" element={<Navbar />}>
+            <Route path="add-product" element={<AddProduct />} />
+            <Route path="categories-crud" element={<CategoriesCrud />} />
+            <Route path="product/:productId" element={<ProductInformation />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="product" element={<Products />} />
+            <Route path="byproduct" element={<ByProducts />} />
+            <Route path="order" element={<OrderTable />} />
+            <Route path="order/:orderId" element={<OrderDetails />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
         </Route>
       </Route>
       {/*  */}

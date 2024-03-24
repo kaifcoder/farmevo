@@ -34,7 +34,9 @@ const createCategory = asyncHandler(async (req, res) => {
         }
 
         // send all categories
-        const categories = (await Category.find({})).reverse();
+        const categories = (await Category.find({
+            createdBy: req.user._id
+        })).reverse();
 
         // send response
         res.status(201).json(new ApiResponse(201, "Category created successfully", categories))

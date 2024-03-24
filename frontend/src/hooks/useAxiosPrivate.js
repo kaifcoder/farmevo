@@ -36,7 +36,7 @@ const useAxiosPrivate = () => {
             axiosWithAuth.interceptors.request.eject(requestIntercept);
             axiosWithAuth.interceptors.response.eject(responseIntercept);
         }
-    }, [auth, refresh])
+    }, [user, refresh])
 
     return axiosWithAuth;
 }
