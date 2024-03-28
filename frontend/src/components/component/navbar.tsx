@@ -2,6 +2,8 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
+import "@/index.css";
+
 import { Input } from "../ui/input";
 import { Outlet, useLocation, Link } from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -16,6 +18,25 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
+  const googleTranslateElementInit = () => {
+    new window.google.translate.TranslateElement(
+      {
+        pageLanguage: "en",
+        autoDisplay: false,
+      },
+      "google_translate_element"
+    );
+  };
+
+  useEffect(() => {
+    var addScript = document.createElement("script");
+    addScript.setAttribute(
+      "src",
+      "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    );
+    document.body.appendChild(addScript);
+    window.googleTranslateElementInit = googleTranslateElementInit;
+  }, []);
   const location = useLocation();
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -99,6 +120,10 @@ export default function Navbar() {
   return (
     <>
       <SearchContext.Provider value={{ searchTerm, setSearchTerm }}>
+        <div className="flex items-center justify-end w-full bg-black">
+          <div className="" id="google_translate_element" />
+        </div>
+
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>

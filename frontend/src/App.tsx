@@ -14,6 +14,13 @@ import { CategoriesCrud } from "./components/component/categories-crud";
 import RequireAuth from "./components/component/RequireAuth";
 import Persistlogin from "./components/component/Persistlogin";
 import ByProducts from "./components/component/ByProducts";
+
+declare global {
+  interface Window {
+    google: any;
+    googleTranslateElementInit: () => void;
+  }
+}
 function App() {
   return (
     <Routes>

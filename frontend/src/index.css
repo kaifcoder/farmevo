@@ -6,6 +6,24 @@
   height: 300px;
   width: 90%;
 }
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important
+
+}
+.skiptranslate.goog-te-gadget {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+body {
+  top: 0px !important;
+}
+@media print {
+  #google_translate_element {
+    display: none;
+  }
+}
  
 @layer base {
   :root {
