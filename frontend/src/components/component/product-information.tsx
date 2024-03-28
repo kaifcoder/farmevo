@@ -1,3 +1,5 @@
+// tslint:disable
+
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../ui/button";
 import { axiosWithAuth } from "@/api/axios";

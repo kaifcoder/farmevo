@@ -14,7 +14,6 @@ import { CategoriesCrud } from "./components/component/categories-crud";
 import RequireAuth from "./components/component/RequireAuth";
 import Persistlogin from "./components/component/Persistlogin";
 import ByProducts from "./components/component/ByProducts";
-
 function App() {
   return (
     <Routes>

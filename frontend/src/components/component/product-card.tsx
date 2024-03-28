@@ -47,7 +47,7 @@ export function ProductCard({
       <div>
         <img
           alt="Product"
-          className="object-cover w-full h-60"
+          className="object-contain w-full h-60"
           src={
             product.thumbnail ||
             "https://images.unsplash.com/photo-1543257580-7269da773bf5?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -70,9 +70,11 @@ export function ProductCard({
               ₹ {product.price}
             </span>
           </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {product.description}
-          </p>
+          <div className="h-[20px] overflow-hidden ">
+            <p className="text-sm text-gray-500 text-ellipsis dark:text-gray-400">
+              {product.description}
+            </p>
+          </div>
           <>
             {product.stock > 0 ? (
               <p className="text-sm text-green-500">
