@@ -16,6 +16,7 @@ const Persistlogin = () => {
   useEffect(() => {
     const verifyReferesh = async () => {
       try {
+        setLoading(true);
         await refresh();
       } catch (error) {
         console.log(error);

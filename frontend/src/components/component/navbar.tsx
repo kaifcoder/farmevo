@@ -5,13 +5,15 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import "@/index.css";
 
 import { Input } from "../ui/input";
-import { Outlet, useLocation, Link } from "react-router-dom";
+import { Outlet, useLocation, Link, useNavigate } from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import AuthContext from "@/provider/authProvider";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import { SearchContext } from "@/provider/searchProvider";
+
+import axios from "@/api/axios";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -41,6 +43,8 @@ export default function Navbar() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const { user, setUser } = useContext(AuthContext);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const { setSearchTerm: any } = useContext(SearchContext);
 
   useEffect(() => {
@@ -71,9 +75,24 @@ export default function Navbar() {
     setSearchTerm(event.target.value);
   };
 
+  const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       console.log("logout");
+      setUser({});
+      try {
+        await axios.post(
+          "users/logout",
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+      } catch (err) {
+        console.error(err);
+      }
+      navigate("/");
     } catch (error: any) {
       console.log(error);
     }
@@ -227,15 +246,15 @@ export default function Navbar() {
 
                           <Menu.Item>
                             {({ active }) => (
-                              <Link
-                                to="/"
+                              <div
+                                onClick={handleLogout}
                                 className={classNames(
-                                  active ? "bg-gray-100" : "",
+                                  active ? "bg-gray-100 cursor-pointer" : "",
                                   "block px-4 py-2 text-sm text-gray-700"
                                 )}
                               >
                                 Sign out
-                              </Link>
+                              </div>
                             )}
                           </Menu.Item>
                         </Menu.Items>

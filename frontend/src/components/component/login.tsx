@@ -1,10 +1,8 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import { toast } from "sonner";
 
 import axios from "@/api/axios";
@@ -35,12 +33,10 @@ export function Login() {
         { withCredentials: true }
       );
 
-      console.log("USER ", data?.data?.user);
-      console.log("ROLE" + data?.data?.user?.role);
-      console.log("TOKEN" + data?.data?.accessToken);
       const user = data?.data?.user;
       const role = user?.role;
       const accessToken = data?.data?.accessToken;
+      console.log("user in login", user);
       setUser({ user, role, accessToken });
       navigate(from, { replace: true });
 

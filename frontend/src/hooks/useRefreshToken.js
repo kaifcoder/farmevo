@@ -1,4 +1,4 @@
-import axiosWithAuth from '../api/axios'
+import axios from '../api/axios'
 import useAuth from './useAuth'
 
 const useRefreshToken = () => {
@@ -6,20 +6,29 @@ const useRefreshToken = () => {
 
     const refresh = async () => {
         try {
-            const response = await axiosWithAuth.get('/users/refresh')
+            const response = await axios.get('/users/refresh', {
+                withCredentials: true,
+
+            })
+            console.log("response in use refresh token", response)
+            console.log("user state in use refresh token", user)
+            const { data } = await axios.get('/users', {
+                withCredentials: true
+            })
+            console.log("user info with accesstoken", data?.data)
             setUser(prev => {
-                console.log(response.data.toString())
-                console.log(JSON.stringify(prev));
-                console.log(response.data.accessToken);
+
                 return {
                     ...prev,
-                    accessToken: response?.data?.accessToken
+                    user: data?.data,
+                    role: data?.data?.role,
+                    accessToken: response?.data?.data?.accessToken
                 }
             })
-            return response?.data?.accessToken
+            return response?.data?.data?.accessToken
 
         } catch (error) {
-            console.log(error)
+            console.log("error in use refresh token hook", error)
         }
     }
     return refresh;
